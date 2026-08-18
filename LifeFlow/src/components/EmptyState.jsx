@@ -1,21 +1,9 @@
-function EmptyState({
-  icon = "📭",
-  title = "Nothing here yet",
-  message = "There is no data to display."
-}) {
-  return (
-    <div className="empty-state">
+import React from 'react';
 
-      <div className="empty-icon">
-        {icon}
-      </div>
-
-      <h3>{title}</h3>
-
-      <p>{message}</p>
-
-    </div>
-  );
-}
-
-export default EmptyState;
+export const EmptyState = ({ title = 'No Items', message = 'Nothing here yet.' }) => (
+  <div className="empty-state">
+    <span className="empty-icon">📝</span>
+    <h3>{title}</h3>
+    <p>{message}</p>
+  </div>
+);

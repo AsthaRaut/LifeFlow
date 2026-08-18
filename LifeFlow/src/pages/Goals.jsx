@@ -1,53 +1,26 @@
-import Button from "../components/Button";
-import EmptyState from "../components/EmptyState";
+import React, { useState, useContext } from 'react';
+import { GoalContext } from '../context/GoalContext';
+import { GoalCard } from '../components/GoalCard';
+import { Button } from '../components/Button';
+import { Modal } from '../components/Modal';
+import { GoalForm } from '../components/GoalForm';
 
-function Goals() {
+export default function Goals() {
+  const { goals, addGoal, updateProgress, deleteGoal } = useContext(GoalContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <div className="page">
-
-      <div className="page-header">
-
-        <div>
-          <h1>My Goals 🎯</h1>
-          <p>Set meaningful goals and track your progress.</p>
-        </div>
-
-        <Button>
-          + Add Goal
-        </Button>
-
+    <div>
+      <div className="page-header-flex">
+        <h1>Goals</h1>
+        <Button onClick={() => setIsModalOpen(true)}>+ Add Goal</Button>
       </div>
 
-      <div className="goals-overview">
+      {goals.map(g => <GoalCard key={g.id} goal={g} onUpdateProgress={updateProgress} onDelete={deleteGoal} />)}
 
-        <div className="goal-stat">
-          <span>🎯</span>
-          <h2>3</h2>
-          <p>Active Goals</p>
-        </div>
-
-        <div className="goal-stat">
-          <span>🏆</span>
-          <h2>5</h2>
-          <p>Completed Goals</p>
-        </div>
-
-        <div className="goal-stat">
-          <span>📈</span>
-          <h2>62%</h2>
-          <p>Average Progress</p>
-        </div>
-
-      </div>
-
-      <EmptyState
-        icon="🎯"
-        title="No goals yet"
-        message="Create your first goal and start working towards it."
-      />
-
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add New Goal">
+        <GoalForm onSubmit={addGoal} onClose={() => setIsModalOpen(false)} />
+      </Modal>
     </div>
   );
 }
-
-export default Goals;

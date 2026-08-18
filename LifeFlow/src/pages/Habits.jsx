@@ -1,53 +1,28 @@
-import Button from "../components/Button";
-import EmptyState from "../components/EmptyState";
+import React, { useState, useContext } from 'react';
+import { HabitContext } from '../context/HabitContext';
+import { HabitCard } from '../components/HabitCard';
+import { Button } from '../components/Button';
+import { Modal } from '../components/Modal';
+import { HabitForm } from '../components/HabitForm';
 
-function Habits() {
+export default function Habits() {
+  const { habits, addHabit, toggleHabit, deleteHabit } = useContext(HabitContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <div className="page">
-
-      <div className="page-header">
-
-        <div>
-          <h1>My Habits 🔥</h1>
-          <p>Build better habits and maintain your streaks.</p>
-        </div>
-
-        <Button>
-          + Add Habit
-        </Button>
-
+    <div>
+      <div className="page-header-flex">
+        <h1>Habits Tracker</h1>
+        <Button onClick={() => setIsModalOpen(true)}>+ Add Habit</Button>
       </div>
 
-      <div className="habit-summary">
-
-        <div>
-          <span>🔥</span>
-          <h2>7 Days</h2>
-          <p>Current Streak</p>
-        </div>
-
-        <div>
-          <span>🏆</span>
-          <h2>21 Days</h2>
-          <p>Best Streak</p>
-        </div>
-
-        <div>
-          <span>✓</span>
-          <h2>85%</h2>
-          <p>Completion</p>
-        </div>
-
+      <div className="habits-grid">
+        {habits.map(h => <HabitCard key={h.id} habit={h} onToggle={toggleHabit} onDelete={deleteHabit} />)}
       </div>
 
-      <EmptyState
-        icon="🌱"
-        title="Your habits will appear here"
-        message="Start building a healthy routine."
-      />
-
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Add New Habit">
+        <HabitForm onSubmit={addHabit} onClose={() => setIsModalOpen(false)} />
+      </Modal>
     </div>
   );
 }
-
-export default Habits;

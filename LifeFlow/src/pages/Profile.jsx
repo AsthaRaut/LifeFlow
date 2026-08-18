@@ -1,48 +1,31 @@
-function Profile() {
+import React, { useContext, useState } from 'react';
+import { UserContext } from '../context/UserContext';
+import { Button } from '../components/Button';
+
+export default function Profile() {
+  const { user, updateUser } = useContext(UserContext);
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    updateUser({ name, email, avatar: name.charAt(0).toUpperCase() });
+    alert('Profile updated successfully!');
+  };
+
   return (
-    <div className="page">
-
-      <div className="page-header">
-
-        <div>
-          <h1>My Profile 👤</h1>
-          <p>Manage your personal information.</p>
-        </div>
-
+    <div>
+      <h1>Profile</h1>
+      <div className="profile-container">
+        <div className="avatar large">{user.avatar}</div>
+        <form onSubmit={handleSave} className="card-form" style={{ width: '100%' }}>
+          <label>Name</label>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+          <label>Email</label>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <Button type="submit">Save Profile</Button>
+        </form>
       </div>
-
-      <div className="profile-card">
-
-        <div className="large-avatar">
-          A
-        </div>
-
-        <h2>Astha</h2>
-        <p>Personal Life Management</p>
-
-        <div className="profile-stats">
-
-          <div>
-            <h3>24</h3>
-            <p>Tasks</p>
-          </div>
-
-          <div>
-            <h3>8</h3>
-            <p>Habits</p>
-          </div>
-
-          <div>
-            <h3>5</h3>
-            <p>Goals</p>
-          </div>
-
-        </div>
-
-      </div>
-
     </div>
   );
 }
-
-export default Profile;

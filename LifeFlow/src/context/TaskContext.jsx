@@ -1,49 +1,24 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useReducer, useEffect } from 'react';
+import { taskReducer } from '../reducers/taskReducer';
+import { initialTasks } from '../data/initialData';
 
-const TaskContext = createContext();
+export const TaskContext = createContext();
 
-function TaskProvider({ children }) {
-  const [tasks, setTasks] = useState([]);
+export const TaskProvider = ({ children }) => {
+  const [tasks, dispatch] = useReducer(taskReducer, [], () => {
+    const local = localStorage.getItem('lf_tasks');
+    return local ? JSON.parse(local) : initialTasks;
+  });
 
-  const addTask = (task) => {
-    setTasks((previousTasks) => [
-      ...previousTasks,
-      task,
-    ]);
-  };
+  useEffect(() => { localStorage.setItem('lf_tasks', JSON.stringify(tasks)); }, [tasks]);
 
-  const deleteTask = (taskId) => {
-    setTasks((previousTasks) =>
-      previousTasks.filter((task) => task.id !== taskId)
-    );
-  };
-
-  const toggleTask = (taskId) => {
-    setTasks((previousTasks) =>
-      previousTasks.map((task) =>
-        task.id === taskId
-          ? { ...task, completed: !task.completed }
-          : task
-      )
-    );
-  };
+  const addTask = (task) => dispatch({ type: 'ADD_TASK', payload: { ...task, id: Date.now(), completed: false } });
+  const toggleTask = (id) => dispatch({ type: 'TOGGLE_TASK', payload: id });
+  const deleteTask = (id) => dispatch({ type: 'DELETE_TASK', payload: id });
 
   return (
-    <TaskContext.Provider
-      value={{
-        tasks,
-        addTask,
-        deleteTask,
-        toggleTask,
-      }}
-    >
+    <TaskContext.Provider value={{ tasks, addTask, toggleTask, deleteTask }}>
       {children}
     </TaskContext.Provider>
   );
-}
-
-export function useTasks() {
-  return useContext(TaskContext);
-}
-
-export default TaskProvider;
+};

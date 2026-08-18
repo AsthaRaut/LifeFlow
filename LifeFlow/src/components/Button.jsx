@@ -1,13 +1,7 @@
-function Button({ children, onClick, type = "button", variant = "primary" }) {
-  return (
-    <button
-      type={type}
-      className={`custom-btn ${variant}`}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}
+import React from 'react';
 
-export default Button;
+export const Button = ({ children, variant = 'primary', onClick, type = 'button' }) => (
+  <button type={type} className={`btn btn-${variant}`} onClick={onClick}>
+    {children}
+  </button>
+);

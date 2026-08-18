@@ -1,54 +1,29 @@
-function Analytics() {
+import React from 'react';
+import { useFetch } from '../hooks/useFetch';
+import { fetchMockAnalytics } from '../services/api';
+import { Loading } from '../components/Loading';
+
+export default function Analytics() {
+  const { data, loading } = useFetch(fetchMockAnalytics);
+
+  if (loading) return <Loading />;
+
   return (
-    <div className="page">
-
-      <div className="page-header">
-        <div>
-          <h1>Analytics 📊</h1>
-          <p>Understand your productivity and progress.</p>
-        </div>
+    <div>
+      <h1>Analytics Overview</h1>
+      <div className="analytics-box">
+        <h3>Efficiency Score: {data.efficiencyScore}%</h3>
+        <p>Based on your weekly habit consistency & task completion rate.</p>
       </div>
 
-      <div className="analytics-grid">
-
-        <div className="analytics-card">
-          <p>Tasks Completed</p>
-          <h2>42</h2>
-          <span>↑ 12% this week</span>
-        </div>
-
-        <div className="analytics-card">
-          <p>Habits Completed</p>
-          <h2>35</h2>
-          <span>↑ 8% this week</span>
-        </div>
-
-        <div className="analytics-card">
-          <p>Productivity</p>
-          <h2>78%</h2>
-          <span>↑ 5% this week</span>
-        </div>
-
+      <div className="bar-chart">
+        {data.weeklyActivity.map(item => (
+          <div key={item.day} className="bar-column">
+            <div className="bar-fill" style={{ height: `${item.count * 12}px` }}>{item.count}</div>
+            <span>{item.day}</span>
+          </div>
+        ))}
       </div>
-
-      <div className="chart-card">
-
-        <h2>Weekly Productivity</h2>
-
-        <div className="simple-chart">
-          <div style={{ height: "60%" }}>Mon</div>
-          <div style={{ height: "80%" }}>Tue</div>
-          <div style={{ height: "50%" }}>Wed</div>
-          <div style={{ height: "90%" }}>Thu</div>
-          <div style={{ height: "70%" }}>Fri</div>
-          <div style={{ height: "45%" }}>Sat</div>
-          <div style={{ height: "75%" }}>Sun</div>
-        </div>
-
-      </div>
-
     </div>
   );
 }
-
-export default Analytics;

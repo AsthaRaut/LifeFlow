@@ -1,52 +1,24 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useReducer, useEffect } from 'react';
+import { habitReducer } from '../reducers/habitReducer';
+import { initialHabits } from '../data/initialData';
 
-const HabitContext = createContext();
+export const HabitContext = createContext();
 
-function HabitProvider({ children }) {
-  const [habits, setHabits] = useState([]);
+export const HabitProvider = ({ children }) => {
+  const [habits, dispatch] = useReducer(habitReducer, [], () => {
+    const local = localStorage.getItem('lf_habits');
+    return local ? JSON.parse(local) : initialHabits;
+  });
 
-  const addHabit = (habit) => {
-    setHabits((previousHabits) => [
-      ...previousHabits,
-      habit,
-    ]);
-  };
+  useEffect(() => { localStorage.setItem('lf_habits', JSON.stringify(habits)); }, [habits]);
 
-  const deleteHabit = (habitId) => {
-    setHabits((previousHabits) =>
-      previousHabits.filter((habit) => habit.id !== habitId)
-    );
-  };
-
-  const toggleHabit = (habitId) => {
-    setHabits((previousHabits) =>
-      previousHabits.map((habit) =>
-        habit.id === habitId
-          ? {
-              ...habit,
-              completed: !habit.completed,
-            }
-          : habit
-      )
-    );
-  };
+  const addHabit = (habit) => dispatch({ type: 'ADD_HABIT', payload: { ...habit, id: Date.now(), streak: 0, completedToday: false } });
+  const toggleHabit = (id) => dispatch({ type: 'TOGGLE_HABIT', payload: id });
+  const deleteHabit = (id) => dispatch({ type: 'DELETE_HABIT', payload: id });
 
   return (
-    <HabitContext.Provider
-      value={{
-        habits,
-        addHabit,
-        deleteHabit,
-        toggleHabit,
-      }}
-    >
+    <HabitContext.Provider value={{ habits, addHabit, toggleHabit, deleteHabit }}>
       {children}
     </HabitContext.Provider>
   );
-}
-
-export function useHabits() {
-  return useContext(HabitContext);
-}
-
-export default HabitProvider;
+};

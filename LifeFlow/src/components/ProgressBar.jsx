@@ -1,20 +1,8 @@
-function ProgressBar({ progress = 0 }) {
-  return (
-    <div className="progress-container">
+import React from 'react';
 
-      <div className="progress-track">
-        <div
-          className="progress-fill"
-          style={{ width: `${progress}%` }}
-        ></div>
-      </div>
-
-      <span className="progress-text">
-        {progress}%
-      </span>
-
-    </div>
-  );
-}
-
-export default ProgressBar;
+export const ProgressBar = ({ progress = 0 }) => (
+  <div className="progress-bar-container">
+    <div className="progress-bar-fill" style={{ width: `${Math.min(100, Math.max(0, progress))}%` }} />
+    <span className="progress-text">{progress}%</span>
+  </div>
+);

@@ -1,73 +1,38 @@
-import { useState } from "react";
-import Button from "../components/Button";
-import EmptyState from "../components/EmptyState";
+import React, { useState, useContext } from 'react';
+import { TaskContext } from '../context/TaskContext';
+import { TaskCard } from '../components/TaskCard';
+import { Button } from '../components/Button';
+import { Modal } from '../components/Modal';
+import { TaskForm } from '../components/TaskForm';
+import { EmptyState } from '../components/EmptyState';
+import { useDebounce } from '../hooks/useDebounce';
 
-function Tasks() {
+export default function Tasks() {
+  const { tasks, addTask, toggleTask, deleteTask } = useContext(TaskContext);
+  const [search, setSearch] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [activeFilter, setActiveFilter] = useState("All");
+  const debouncedSearch = useDebounce(search, 300);
+  const filteredTasks = tasks.filter(t => t.title.toLowerCase().includes(debouncedSearch.toLowerCase()));
 
   return (
-    <div className="page">
-
-      <div className="page-header">
-
-        <div>
-          <h1>My Tasks</h1>
-          <p>Manage your daily tasks and stay productive.</p>
-        </div>
-
-        <Button>
-          + Add Task
-        </Button>
-
+    <div>
+      <div className="page-header-flex">
+        <h1>Tasks</h1>
+        <Button onClick={() => setIsModalOpen(true)}>+ Add Task</Button>
       </div>
 
+      <input type="text" className="search-input" placeholder="Search tasks..." value={search} onChange={(e) => setSearch(e.target.value)} />
 
-      <div className="task-filters">
+      {filteredTasks.length === 0 ? (
+        <EmptyState title="No Tasks Found" message="Try searching something else or create a new task." />
+      ) : (
+        filteredTasks.map(t => <TaskCard key={t.id} task={t} onToggle={toggleTask} onDelete={deleteTask} />)
+      )}
 
-        <button
-          className={`filter ${activeFilter === "All" ? "active" : ""}`}
-          onClick={() => setActiveFilter("All")}
-        >
-          All
-        </button>
-
-        <button
-          className={`filter ${activeFilter === "Today" ? "active" : ""}`}
-          onClick={() => setActiveFilter("Today")}
-        >
-          Today
-        </button>
-
-        <button
-          className={`filter ${activeFilter === "Pending" ? "active" : ""}`}
-          onClick={() => setActiveFilter("Pending")}
-        >
-          Pending
-        </button>
-
-        <button
-          className={`filter ${activeFilter === "Completed" ? "active" : ""}`}
-          onClick={() => setActiveFilter("Completed")}
-        >
-          Completed
-        </button>
-
-      </div>
-
-
-      <div className="tasks-container">
-
-        <EmptyState
-          icon="📝"
-          title="Task management is coming"
-          message={`Showing ${activeFilter} tasks.`}
-        />
-
-      </div>
-
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create New Task">
+        <TaskForm onSubmit={addTask} onClose={() => setIsModalOpen(false)} />
+      </Modal>
     </div>
   );
 }
-
-export default Tasks;

@@ -1,10 +1,8 @@
-function Loading() {
-  return (
-    <div className="loading">
-      <div className="loading-spinner"></div>
-      <p>Loading...</p>
-    </div>
-  );
-}
+import React from 'react';
 
-export default Loading;
+export const Loading = () => (
+  <div className="loading-spinner-container">
+    <div className="spinner">⟳</div>
+    <p>Loading...</p>
+  </div>
+);

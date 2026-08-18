@@ -1,28 +1,21 @@
-function HabitCard({ habit, onToggle }) {
-  return (
-    <div className="habit-card">
+import React from 'react';
+import { Button } from './Button';
 
-      <div className="habit-icon">
-        {habit.icon}
-      </div>
-
-      <div className="habit-info">
+export const HabitCard = ({ habit, onToggle, onDelete }) => (
+  <div className="habit-card">
+    <div className="habit-header">
+      <span className="habit-icon">{habit.icon}</span>
+      <div>
         <h3>{habit.name}</h3>
-
-        <p>
-          🔥 {habit.streak} day streak
-        </p>
+        <p>{habit.description}</p>
       </div>
-
-      <button
-        className={`habit-btn ${habit.completed ? "done" : ""}`}
-        onClick={() => onToggle(habit.id)}
-      >
-        {habit.completed ? "✓ Done" : "Complete"}
-      </button>
-
     </div>
-  );
-}
-
-export default HabitCard;
+    <div className="habit-footer">
+      <span>🔥 {habit.streak} days</span>
+      <Button variant={habit.completedToday ? 'secondary' : 'primary'} onClick={() => onToggle(habit.id)}>
+        {habit.completedToday ? '✓ Done' : 'Complete'}
+      </Button>
+      {onDelete && <button className="delete-btn" onClick={() => onDelete(habit.id)}>🗑</button>}
+    </div>
+  </div>
+);

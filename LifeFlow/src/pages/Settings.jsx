@@ -1,61 +1,41 @@
-function Settings() {
+import React, { useContext } from 'react';
+import { SettingsContext } from '../context/SettingsContext';
+import { Button } from '../components/Button';
+
+export default function Settings() {
+  const { settings, updateSettings } = useContext(SettingsContext);
+
+  const handleReset = () => {
+    if (window.confirm('Reset all saved local application data?')) {
+      localStorage.clear();
+      window.location.reload();
+    }
+  };
+
   return (
-    <div className="page">
-
-      <div className="page-header">
-
-        <div>
-          <h1>Settings ⚙️</h1>
-          <p>Customize your LifeFlow experience.</p>
+    <div>
+      <h1>Settings</h1>
+      <div className="settings-list">
+        <div className="setting-item">
+          <span>Dark Mode</span>
+          <button onClick={() => updateSettings({ darkMode: !settings.darkMode })}>
+            {settings.darkMode ? 'ON' : 'OFF'}
+          </button>
         </div>
-
+        <div className="setting-item">
+          <span>Notifications Enabled</span>
+          <button onClick={() => updateSettings({ notifications: !settings.notifications })}>
+            {settings.notifications ? 'YES' : 'NO'}
+          </button>
+        </div>
+        <div className="setting-item">
+          <span>Daily Reminders</span>
+          <button onClick={() => updateSettings({ dailyReminders: !settings.dailyReminders })}>
+            {settings.dailyReminders ? 'YES' : 'NO'}
+          </button>
+        </div>
+        <Button variant="danger" onClick={handleReset}>Reset Local Storage</Button>
       </div>
-
-      <div className="settings-card">
-
-        <div className="setting-item">
-
-          <div>
-            <h3>Notifications</h3>
-            <p>Receive reminders for your tasks and habits.</p>
-          </div>
-
-          <input
-            type="checkbox"
-            defaultChecked
-          />
-
-        </div>
-
-        <div className="setting-item">
-
-          <div>
-            <h3>Daily Reminder</h3>
-            <p>Get a daily reminder to review your goals.</p>
-          </div>
-
-          <input
-            type="checkbox"
-            defaultChecked
-          />
-
-        </div>
-
-        <div className="setting-item">
-
-          <div>
-            <h3>Dark Mode</h3>
-            <p>Switch between light and dark appearance.</p>
-          </div>
-
-          <input type="checkbox" />
-
-        </div>
-
-      </div>
-
     </div>
   );
 }
-
-export default Settings;

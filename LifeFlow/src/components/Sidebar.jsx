@@ -1,90 +1,22 @@
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
-function Sidebar() {
+export const Sidebar = () => {
   return (
     <aside className="sidebar">
-
-      <div className="sidebar-menu">
-
-        <NavLink
-          to="/"
-          className="sidebar-link"
-        >
-          <span>🏠</span>
-          <span>Dashboard</span>
-        </NavLink>
-
-
-        <NavLink
-          to="/tasks"
-          className="sidebar-link"
-        >
-          <span>✓</span>
-          <span>Tasks</span>
-        </NavLink>
-
-
-        <NavLink
-          to="/habits"
-          className="sidebar-link"
-        >
-          <span>🔥</span>
-          <span>Habits</span>
-        </NavLink>
-
-
-        <NavLink
-          to="/goals"
-          className="sidebar-link"
-        >
-          <span>🎯</span>
-          <span>Goals</span>
-        </NavLink>
-
-
-        <NavLink
-          to="/analytics"
-          className="sidebar-link"
-        >
-          <span>📊</span>
-          <span>Analytics</span>
-        </NavLink>
-
-
-        <NavLink
-          to="/journal"
-          className="sidebar-link"
-        >
-          <span>📝</span>
-          <span>Journal</span>
-        </NavLink>
-
-      </div>
-
-
-      <div className="sidebar-bottom">
-
-        {/* <NavLink
-          to="/settings"
-          className="sidebar-link"
-        >
-          <span>⚙️</span>
-          <span>Settings</span>
-        </NavLink> */}
-
-        <NavLink
-          to="/tasks"
-          className="sidebar-link"
-          onClick={() => console.log("TASKS CLICKED")}
-        >
-          <span>✓</span>
-          <span>Tasks</span>
-        </NavLink>
-
-      </div>
-
+      <ul className="nav-list">
+        <li><NavLink to="/">🏠 Dashboard</NavLink></li>
+        <li><NavLink to="/tasks">✓ Tasks</NavLink></li>
+        <li><NavLink to="/habits">🔥 Habits</NavLink></li>
+        <li><NavLink to="/goals">🎯 Goals</NavLink></li>
+        <li><NavLink to="/analytics">📊 Analytics</NavLink></li>
+        <li><NavLink to="/journal">📔 Journal</NavLink></li>
+      </ul>
+      <div className="sidebar-divider" />
+      <ul className="nav-list">
+        <li><NavLink to="/profile">👤 Profile</NavLink></li>
+        <li><NavLink to="/settings">⚙ Settings</NavLink></li>
+      </ul>
     </aside>
   );
-}
-
-export default Sidebar;
+};

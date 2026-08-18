@@ -1,20 +1,8 @@
-function ErrorMessage({
-  message = "Something went wrong. Please try again."
-}) {
-  return (
-    <div className="error-message">
+import React from 'react';
 
-      <span className="error-icon">
-        ⚠️
-      </span>
-
-      <div>
-        <h3>Oops!</h3>
-        <p>{message}</p>
-      </div>
-
-    </div>
-  );
-}
-
-export default ErrorMessage;
+export const ErrorMessage = ({ message, onRetry }) => (
+  <div className="error-card">
+    <h3>⚠ {message}</h3>
+    {onRetry && <button onClick={onRetry}>Try Again</button>}
+  </div>
+);
